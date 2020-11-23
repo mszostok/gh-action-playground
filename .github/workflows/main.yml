@@ -34,8 +34,9 @@ jobs:
     - uses: actions/checkout@v2
     - uses: actions/download-artifact@v2
       with:
-        name: art_${{github.sha}}
+        name: art_not_exits_${{github.sha}}
     - name: Display structure
       run: ls -R
     - name: Display downloaded file
-      run: cat world.txt 
+      run: cat world.txt
+
