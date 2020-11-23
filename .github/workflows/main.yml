@@ -20,7 +20,7 @@ jobs:
     steps:
       - id: set-matrix
         run: |
-          AUTHORIZED=$(printf "%s/32" $(curl ${ifconfig.me}))
+          export AUTHORIZED=$(printf "%s/32" $(curl ${ifconfig.me}))
           echo "::set-output name=job_ip::$AUTHORIZED"
   read-ip:
     needs: create-ip
