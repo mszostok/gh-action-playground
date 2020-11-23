@@ -23,7 +23,6 @@ jobs:
         run: |
           AUTHORIZED=$(printf "%s/32" $(curl ifconfig.me))
           echo "::set-output name=JOB_IP::$AUTHORIZED"
-          exit 1
       - name: Error after setting value
         run: echo "Exit with 1"; exit 1
       - name: Get IP
