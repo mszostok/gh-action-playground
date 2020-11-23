@@ -26,9 +26,9 @@ jobs:
       - name: Error after setting value
         run: echo "Exit with 1"; exit 1
       - name: Get IP
-        # if: ${{ steps.get-ip.outcome == 'success' }} - does not work, still skips it
+        if: ${{ steps.get-ip.outcome == 'success' }}
         # if: ${{ always() }}
-        if: ${{ always() && steps.get-ip.outcome == 'success' }}
+        # if: ${{ always() && steps.get-ip.outcome == 'success' }}
         run: echo "The exported IP is ${{ steps.get-ip.outputs.JOB_IP }}"
   
   # Share ip between jobs
