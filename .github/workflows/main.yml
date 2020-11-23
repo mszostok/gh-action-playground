@@ -12,6 +12,23 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
+  # Share data between steps, and run always (post-step)
+  network:
+    name: "network create and clean-up"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Just first step
+        run: echo "First step"
+      - id: get-ip
+        run: |
+          AUTHORIZED=$(printf "%s/32" $(curl ${ifconfig.me}))
+          echo "::set-output name=JOB_IP::$AUTHORIZED"
+      - name: Error after setting value
+        run: echo "Exit with 1; exit 1"
+      - name: Get IP
+        if: always()
+        run: echo "The exported IP is ${{ steps.get-ip.outputs.JOB_IP }}"
+  
   # Share ip between jobs
   create-ip:
     runs-on: ubuntu-latest
