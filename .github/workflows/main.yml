@@ -18,7 +18,7 @@ jobs:
     outputs:
       job_ip: ${{ steps.enable-network.outputs.job_ip }}
     steps:
-      - id: set-matrix
+      - id: enable-network
         run: |
           export AUTHORIZED=$(printf "%s/32" $(curl ifconfig.me))
           echo "::set-output name=job_ip::$AUTHORIZED"
