@@ -26,7 +26,7 @@ jobs:
     needs: create-ip
     runs-on: ubuntu-latest
     steps:
-      - run: echo ${{needs.create-ip.outputs.job_ip)}}
+      - run: echo ${{needs.create-ip.outputs.job_ip}}
 
   # Generates and uploads artifact with current SHA name
   upload-artifact:
