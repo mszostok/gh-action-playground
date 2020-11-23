@@ -26,52 +26,53 @@ jobs:
       - name: Error after setting value
         run: echo "Exit with 1"; exit 1
       - name: Get IP
-        if: ${{ steps.get-ip.outcome == 'success' }}
+        # if: ${{ steps.get-ip.outcome == 'success' }} - does not work, still skips it
+        if: ${{ always() }}
         run: echo "The exported IP is ${{ steps.get-ip.outputs.JOB_IP }}"
   
   # Share ip between jobs
-  create-ip:
-    runs-on: ubuntu-latest
-    outputs:
-      job_ip: ${{ steps.enable-network.outputs.job_ip }}
-    steps:
-      - id: enable-network
-        run: |
-          export AUTHORIZED=$(printf "%s/32" $(curl ifconfig.me))
-          echo "::set-output name=job_ip::$AUTHORIZED"
-  read-ip:
-    needs: create-ip
-    runs-on: ubuntu-latest
-    steps:
-      - run: echo ${{needs.create-ip.outputs.job_ip}}
+#   create-ip:
+#     runs-on: ubuntu-latest
+#     outputs:
+#       job_ip: ${{ steps.enable-network.outputs.job_ip }}
+#     steps:
+#       - id: enable-network
+#         run: |
+#           export AUTHORIZED=$(printf "%s/32" $(curl ifconfig.me))
+#           echo "::set-output name=job_ip::$AUTHORIZED"
+#   read-ip:
+#     needs: create-ip
+#     runs-on: ubuntu-latest
+#     steps:
+#       - run: echo ${{needs.create-ip.outputs.job_ip}}
 
-  # Generates and uploads artifact with current SHA name
-  upload-artifact:
-    # The type of runner that the job will run on
-    runs-on: ubuntu-latest
+#   # Generates and uploads artifact with current SHA name
+#   upload-artifact:
+#     # The type of runner that the job will run on
+#     runs-on: ubuntu-latest
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
-    steps:
-    - uses: actions/checkout@v2
-    - run: echo hello > world.txt
-    - id: upload-data
-      uses: actions/upload-artifact@v2
-      with:
-        name: art_${{github.sha}}
-        path: world.txt
-        retention-days: 1 # Default 90 days
+#     # Steps represent a sequence of tasks that will be executed as part of the job
+#     steps:
+#     - uses: actions/checkout@v2
+#     - run: echo hello > world.txt
+#     - id: upload-data
+#       uses: actions/upload-artifact@v2
+#       with:
+#         name: art_${{github.sha}}
+#         path: world.txt
+#         retention-days: 1 # Default 90 days
         
-  # Downloads and prints the artifact with current SHA name
-  download-artifact:
-    needs: [upload-artifact]
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v2
-    - uses: actions/download-artifact@v2
-      with:
-        name: art_${{github.sha}}
-    - name: Display structure
-      run: ls -R
-    - name: Display downloaded file
-      run: cat world.txt
+#   # Downloads and prints the artifact with current SHA name
+#   download-artifact:
+#     needs: [upload-artifact]
+#     runs-on: ubuntu-latest
+#     steps:
+#     - uses: actions/checkout@v2
+#     - uses: actions/download-artifact@v2
+#       with:
+#         name: art_${{github.sha}}
+#     - name: Display structure
+#       run: ls -R
+#     - name: Display downloaded file
+#       run: cat world.txt
 
