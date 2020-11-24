@@ -43,6 +43,9 @@ jobs:
       - id: enable-network
         run: |
          AUTHORIZED=$(printf "%s/32" $(curl ifconfig.me))
+         echo "::set-output name=JOB_IP::$AUTHORIZED"
+      - run:
+          exit 1
 
   read-ip:
     needs: create-ip
