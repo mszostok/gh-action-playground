@@ -22,14 +22,16 @@ jobs:
       - id: get-ip
         run: |
           AUTHORIZED=$(printf "%s/32" $(curl ifconfig.me))
-          echo "::set-output name=JOB_IP::$AUTHORIZED"
       - name: Error after setting value
         run: echo "Exit with 1"; exit 1
       - name: Get IP
-        if: ${{ steps.get-ip.outcome == 'success' }}
+        # if: ${{ steps.get-ip.outcome == 'success' }} - Does not work, `Evaluating: (success() && (steps.get-ip.outcome == 'success'))` -> "If your if expression does not contain any of the status functions it will automatically result with success(). "
         # if: ${{ always() }}
-        # if: ${{ always() && steps.get-ip.outcome == 'success' }}
-        run: echo "The exported IP is ${{ steps.get-ip.outputs.JOB_IP }}"
+        if: ${{ always() && steps.get-ip.outcome == 'success' && steps.get-ip.outputs.JOB_IP != '' }}
+        env:
+          JOB_IP: "${{ steps.get-ip.outputs.JOB_IP }}"
+        run: |
+          echo "The exported IP is $JOB_IP"
   
   # Share ip between jobs
 #   create-ip:
