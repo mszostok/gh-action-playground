@@ -9,7 +9,9 @@ on:
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
-
+    OVERRIDE_DOCKER_TAG:
+      description: Docker images tag. If not provided images generated from git commit SHA are used.
+      required: false
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # Share data between steps, and run always (post-step)
@@ -34,28 +36,38 @@ jobs:
 #         run: |
 #           echo "The exported IP is $JOB_IP"
   
-  # Share ip between jobs
-  create-ip:
+  input-envs:
     runs-on: ubuntu-latest
-    outputs:
-      job_ip: ${{ steps.enable-network.outputs.job_ip }}
     steps:
-      - id: enable-network
+      - id: set-env
         run: |
-         AUTHORIZED=$(printf "%s/32" $(curl ifconfig.me))
-         echo "::set-output name=JOB_IP::$AUTHORIZED"
+          echo "DOCKER_TAG=123" >> $GITHUB_ENV
       - run:
-          exit 1
+          export DOCKER_TAG=${OVERRIDE_DOCKER_TAG:-${DOCKER_TAG}}
+          echo $DOCKER_TAG
 
-  read-ip:
-    needs: create-ip
-    runs-on: ubuntu-latest
-    if: ${{ always() && needs.create-ip.outputs.JOB_IP != null }}
-    steps:
-      - env:
-          JOB_IP: "${{needs.create-ip.outputs.JOB_IP}}"
-        run: |
-          echo "The exported IP is $JOB_IP"
+  # Share ip between jobs
+#   create-ip:
+#     runs-on: ubuntu-latest
+#     outputs:
+#       job_ip: ${{ steps.enable-network.outputs.job_ip }}
+#     steps:
+#       - id: enable-network
+#         run: |
+#          AUTHORIZED=$(printf "%s/32" $(curl ifconfig.me))
+#          echo "::set-output name=JOB_IP::$AUTHORIZED"
+#       - run:
+#           exit 1
+
+#   read-ip:
+#     needs: create-ip
+#     runs-on: ubuntu-latest
+#     if: ${{ always() && needs.create-ip.outputs.JOB_IP != null }}
+#     steps:
+#       - env:
+#           JOB_IP: "${{needs.create-ip.outputs.JOB_IP}}"
+#         run: |
+#           echo "The exported IP is $JOB_IP"
 
 #   # Generates and uploads artifact with current SHA name
 #   upload-artifact:
