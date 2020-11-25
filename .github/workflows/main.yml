@@ -40,10 +40,12 @@ jobs:
   input-envs:
     runs-on: ubuntu-latest
     steps:
-      - id: set-env
+      - name: set-env
         run: |
           echo "DOCKER_TAG=123" >> $GITHUB_ENV
-      - run:
+          echo $OVERRIDE_DOCKER_TAG
+      - name: echo-env
+        run:
           export DOCKER_TAG=${OVERRIDE_DOCKER_TAG:-${DOCKER_TAG}}
           echo $DOCKER_TAG
 
