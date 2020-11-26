@@ -57,7 +57,7 @@ jobs:
           echo $OVERRIDE_DOCKER_TAG
       - name: echo-env
         env:
-          OVERRIDE_DOCKER_TAG: ${{ github.event.inputs.OVERRIDE_DOCKER_TAG }} 
+          OVERRIDE_DOCKER_TAG: ${{ github.event.inputs.overrideDockerTag }} 
         run:
           export DOCKER_TAG=${OVERRIDE_DOCKER_TAG:-${DOCKER_TAG}}
           #echo $DOCKER_TAG
