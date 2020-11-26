@@ -53,12 +53,14 @@ jobs:
           ref: ${{ github.event.inputs.gitCommitSHA }}
       - name: set-env
         run: |
-          echo "DOCKER_TAG=123" >> $GITHUB_ENV
+          echo "DOCKER_TAG=123" >> "$GITHUB_ENV"
           echo $OVERRIDE_DOCKER_TAG
       - name: echo-env
         env:
           OVERRIDE_DOCKER_TAG: ${{ github.event.inputs.overrideDockerTag }} 
         run:
+          echo "$DOCKER_TAG"
+          echo "$OVERRIDE_DOCKER_TAG"
           export DOCKER_TAG="${OVERRIDE_DOCKER_TAG:-${DOCKER_TAG}}"
           echo "$DOCKER_TAG"
           
