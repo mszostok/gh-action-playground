@@ -10,7 +10,10 @@ on:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
     inputs:
-      OVERRIDE_DOCKER_TAG:
+      gitCommitSHA:
+        description: Optional
+        required: false
+      overrideDockerTag:
         description: Docker images tag. If not provided images generated from git commit SHA are used.
         required: false
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
@@ -40,6 +43,12 @@ jobs:
   input-envs:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v2
+        with:
+          # The branch, tag or SHA to checkout. When checking out the repository that
+          # triggered a workflow, this defaults to the reference or SHA for that event.
+          # Otherwise, uses the default branch.
+          ref: ${{ github.event.inputs.gitCommitSHA }}"
       - name: set-env
         run: |
           echo "DOCKER_TAG=123" >> $GITHUB_ENV
@@ -49,7 +58,7 @@ jobs:
           OVERRIDE_DOCKER_TAG: ${{ github.event.inputs.OVERRIDE_DOCKER_TAG }} 
         run:
           export DOCKER_TAG=${OVERRIDE_DOCKER_TAG:-${DOCKER_TAG}}
-          echo $DOCKER_TAG
+          #echo $DOCKER_TAG
 
   # Share ip between jobs
 #   create-ip:
