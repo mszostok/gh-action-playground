@@ -59,8 +59,8 @@ jobs:
         env:
           OVERRIDE_DOCKER_TAG: ${{ github.event.inputs.overrideDockerTag }} 
         run:
-          export DOCKER_TAG=${OVERRIDE_DOCKER_TAG:-${DOCKER_TAG}}
-          echo "Docker tag: $DOCKER_TAG Override: $OVERRIDE_DOCKER_TAG"
+          export DOCKER_TAG="${OVERRIDE_DOCKER_TAG:-${DOCKER_TAG}}"
+          echo "$DOCKER_TAG"
           
 
   # Share ip between jobs
