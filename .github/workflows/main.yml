@@ -43,12 +43,14 @@ jobs:
   input-envs:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - name: Clone Repository (Latest)
+        uses: actions/checkout@v2
+        if: github.event.inputs.gitCommitSHA == ''
+      - name: Clone Repository (Custom Ref)
+        uses: actions/checkout@v2
+        if: github.event.inputs.gitCommitSHA != ''
         with:
-          # The branch, tag or SHA to checkout. When checking out the repository that
-          # triggered a workflow, this defaults to the reference or SHA for that event.
-          # Otherwise, uses the default branch.
-          ref: ${{ github.event.inputs.gitCommitSHA }}"
+          ref: ${{ github.event.inputs.gitCommitSHA }}
       - name: set-env
         run: |
           echo "DOCKER_TAG=123" >> $GITHUB_ENV
