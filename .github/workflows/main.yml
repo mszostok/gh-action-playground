@@ -18,6 +18,23 @@ on:
         required: false
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
+  
+# name: Check Spelling
+# on:
+#   pull_request:
+#     paths:
+#     - '**.js'
+#     - '**.vue'
+#     - '**.txt'
+#     - '**.html'
+#     - '**.md'
+# jobs:
+  spellcheck:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Check Spelling
+      uses: UnicornGlobal/spellcheck-github-actions@master
   # Share data between steps, and run always (post-step)
 #   network:
 #     name: "network create and clean-up"
