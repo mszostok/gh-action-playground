@@ -35,6 +35,9 @@ jobs:
     - uses: actions/checkout@v2
     - name: Check Spelling
       uses: UnicornGlobal/spellcheck-github-actions@master
+
+    - uses: rojopolis/spellcheck-github-actions@0.5.0
+      name: Spellcheck
   # Share data between steps, and run always (post-step)
 #   network:
 #     name: "network create and clean-up"
