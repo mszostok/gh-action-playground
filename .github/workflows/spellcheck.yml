@@ -1,0 +1,17 @@
+name: Typo CI
+
+on:
+  pull_request:
+    types: [ opened, synchronize, reopened ]
+    branches:
+      - "master"
+jobs:
+  spellcheck:
+    name: Typo CI
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: TypoCheck
+        uses: typoci/spellcheck-action@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
