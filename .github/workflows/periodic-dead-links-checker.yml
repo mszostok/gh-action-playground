@@ -1,0 +1,16 @@
+name: Periodic dead links checker
+
+on:
+  schedule:
+    # Runs at 09:00 AM CET every day
+    - cron:  '0 7 * * *'
+  workflow_dispatch:
+
+jobs:
+  sanity:
+    runs-on: ubuntu-latest
+    steps:
+      # Checks-out your repository, which is validated in the next step
+      - uses: actions/checkout@v2
+      - name: "Running dead links checker"
+        uses: docker://mszostok/milv:0.0.1
