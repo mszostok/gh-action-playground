@@ -44,16 +44,6 @@ jobs:
       if: always()
       uses: sbates130272/spellcheck-github-actions@v0.6.0
   
-  spellcheck-typeci:
-    name: Typo CI (GitHub Action)
-    runs-on: ubuntu-latest
-    timeout-minutes: 4
-    steps:
-    - uses: actions/checkout@v2
-    - name: TypoCheck
-      uses: typoci/spellcheck-action@master
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   # Share data between steps, and run always (post-step)
 #   network:
 #     name: "network create and clean-up"
