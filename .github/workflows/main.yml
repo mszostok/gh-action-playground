@@ -18,7 +18,83 @@ on:
         required: false
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  
+
+  entry-tests:
+    name: Lint and test code
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Simulate tests
+        run: echo "Test output"
+
+  prepare-matrix:
+    name: Prepare components build matrix
+    runs-on: ubuntu-latest
+    steps:
+      - name: setup env
+        run:  echo "Prepare matrix"
+
+  build-app:
+    name: Build app
+    runs-on: ubuntu-latest
+    needs: prepare-matrix
+    steps:
+      - name: build app
+        run:  echo "Build app"
+
+  build-tools:
+    needs: prepare-matrix
+    name: Build tools
+    runs-on: ubuntu-latest
+    steps:
+      - name: build app
+        run:  echo "Build app"
+
+
+  integration-tests:
+    name: Integration tests
+    runs-on: ubuntu-latest
+    needs: [ build-app, build-tools]
+    steps:
+     
+      - name: Setup environment
+        run:  echo "Run int tests"
+
+
+  update-cluster:
+    name: Update cluster
+    runs-on: ubuntu-latest
+    needs: [ integration-tests, entry-tests ]
+
+    steps:
+      - name: First step
+        run: echo "First update cluster step"
+      - name: Second step
+        run: echo "Second update cluster step"
+        
+
+  slackNotification:
+    name: Slack Notification
+    runs-on: ubuntu-latest
+    needs: [update-cluster]
+    if: always()
+    steps:
+      - uses: actions/checkout@v2
+      - name: Slack Notification
+        if: ${{ always() && needs.update-cluster.result != 'success' }}
+        run: echo "Slack notification sent"
+#         uses: rtCamp/action-slack-notify@v2
+#         env:
+#           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK }}
+#           SLACK_CHANNEL: 'voltron-core-dev-private'
+#           SLACK_COLOR: 'red'
+#           SLACK_MESSAGE: 'Master branch build failed :ahhhhhhhhh:'
+#           SLACK_TITLE: 'Message'
+#           SLACK_ICON_EMOJI: ':this-is-fine:'
+#           SLACK_USERNAME: Voltron CI Notifier
+#           SLACK_FOOTER: ''
+
+
 # name: Check Spelling
 # on:
 #   pull_request:
@@ -29,20 +105,20 @@ jobs:
 #     - '**.html'
 #     - '**.md'
 # jobs:
-  spellcheck:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v2
-    - name: Check Spelling
-      if: always()
-      uses: UnicornGlobal/spellcheck-github-actions@master
+#   spellcheck:
+#     runs-on: ubuntu-latest
+#     steps:
+#     - uses: actions/checkout@v2
+#     - name: Check Spelling
+#       if: always()
+#       uses: UnicornGlobal/spellcheck-github-actions@master
 
-    - uses: rojopolis/spellcheck-github-actions@0.5.0
-      if: always()
-      name: Spellcheck
-    - name: Run PySpelling as a GitHub action
-      if: always()
-      uses: sbates130272/spellcheck-github-actions@v0.6.0
+#     - uses: rojopolis/spellcheck-github-actions@0.5.0
+#       if: always()
+#       name: Spellcheck
+#     - name: Run PySpelling as a GitHub action
+#       if: always()
+#       uses: sbates130272/spellcheck-github-actions@v0.6.0
   
   # Share data between steps, and run always (post-step)
 #   network:
@@ -66,29 +142,29 @@ jobs:
 #         run: |
 #           echo "The exported IP is $JOB_IP"
   
-  input-envs:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Clone Repository (Latest)
-        uses: actions/checkout@v2
-        if: github.event.inputs.gitCommitSHA == ''
-      - name: Clone Repository (Custom Ref)
-        uses: actions/checkout@v2
-        if: github.event.inputs.gitCommitSHA != ''
-        with:
-          ref: ${{ github.event.inputs.gitCommitSHA }}
-      - name: set-env
-        run: |
-          echo "DOCKER_TAG=123" >> "$GITHUB_ENV"
-          echo $OVERRIDE_DOCKER_TAG
-      - name: echo-env
-        env:
-          OVERRIDE_DOCKER_TAG: ${{ github.event.inputs.overrideDockerTag }} 
-        run:
-          echo "$DOCKER_TAG"
-          echo "$OVERRIDE_DOCKER_TAG"
-          export DOCKER_TAG="${OVERRIDE_DOCKER_TAG:-${DOCKER_TAG}}"
-          echo "$DOCKER_TAG"
+#   input-envs:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: Clone Repository (Latest)
+#         uses: actions/checkout@v2
+#         if: github.event.inputs.gitCommitSHA == ''
+#       - name: Clone Repository (Custom Ref)
+#         uses: actions/checkout@v2
+#         if: github.event.inputs.gitCommitSHA != ''
+#         with:
+#           ref: ${{ github.event.inputs.gitCommitSHA }}
+#       - name: set-env
+#         run: |
+#           echo "DOCKER_TAG=123" >> "$GITHUB_ENV"
+#           echo $OVERRIDE_DOCKER_TAG
+#       - name: echo-env
+#         env:
+#           OVERRIDE_DOCKER_TAG: ${{ github.event.inputs.overrideDockerTag }} 
+#         run:
+#           echo "$DOCKER_TAG"
+#           echo "$OVERRIDE_DOCKER_TAG"
+#           export DOCKER_TAG="${OVERRIDE_DOCKER_TAG:-${DOCKER_TAG}}"
+#           echo "$DOCKER_TAG"
           
 
   # Share ip between jobs
