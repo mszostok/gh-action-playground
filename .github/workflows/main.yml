@@ -59,6 +59,8 @@ jobs:
      
       - name: Setup environment
         run:  echo "Run int tests"
+      - name: Setup environment
+        run:  "echo 'simulate err' &&  exit 1"
 
 
   update-cluster:
