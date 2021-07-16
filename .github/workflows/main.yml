@@ -22,10 +22,13 @@ jobs:
   entry-tests:
     name: Lint and test code
     runs-on: ubuntu-latest
-
+    env:
+      CAPACT_BINARY: "${{ github.workspace}}/capact-linux-amd64"
     steps:
       - name: Simulate tests
         run: echo "Test output"
+      - name: Simulate tests
+        run: echo $CAPACT_BINARY
 
   prepare-matrix:
     name: Prepare components build matrix
