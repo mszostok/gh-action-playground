@@ -25,10 +25,19 @@ jobs:
     steps:
       - name: Adding markdown
         run: |
-          echo "usage: up [--level <n>| -n <levels>][--help][--version]
-          ### Hello world! :rocket:
-          Report bugs to: 
-          up home page: " >> $GITHUB_STEP_SUMMARY
+          echo "
+
+          ### BotKube image published successfully! :rocket:
+
+          ```bash
+          gh pr checkout ${PR_NUMBER}
+          helm install botkube -n botkube --create-namespace \
+          --set image.repository=infracloudio/pr/botkube \
+          --set image.tag=v${PR_NUMBER} \
+          ./helm/botkube
+          ```
+
+          " >> $GITHUB_STEP_SUMMARYY
 
 #   entry-tests:
 #     name: Lint and test code
