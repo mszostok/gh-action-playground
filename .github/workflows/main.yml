@@ -27,18 +27,16 @@ jobs:
     steps:
       - name: Adding markdown
         run: |
-          $GITHUB_STEP_SUMMARYY << EOF
-
+          cat > $GITHUB_STEP_SUMMARY << ENDOFFILE
           ### BotKube image published successfully! :rocket:
 
-          ```bash
-          gh pr checkout ${PR_NUMBER}
-          helm install botkube -n botkube --create-namespace \
-          --set image.repository=infracloudio/pr/botkube \
-          --set image.tag=v${PR_NUMBER} \
-          ./helm/botkube
-          ```
-          EOF
+              gh pr checkout ${PR_NUMBER}
+              helm install botkube -n botkube --create-namespace \\
+              --set image.repository=infracloudio/pr/botkube \\
+              --set image.tag=v${PR_NUMBER} \\
+              ./helm/botkube
+
+          ENDOFFILE
 
 #   entry-tests:
 #     name: Lint and test code
