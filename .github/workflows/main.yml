@@ -22,10 +22,12 @@ jobs:
   entry-tests:
     name: Lint and test code
     runs-on: ubuntu-latest
+    env:
+      PR_NUMBER: 1
     steps:
       - name: Adding markdown
         run: |
-          echo "
+          $GITHUB_STEP_SUMMARYY << EOF
 
           ### BotKube image published successfully! :rocket:
 
@@ -36,8 +38,7 @@ jobs:
           --set image.tag=v${PR_NUMBER} \
           ./helm/botkube
           ```
-
-          " >> $GITHUB_STEP_SUMMARYY
+          EOF
 
 #   entry-tests:
 #     name: Lint and test code
