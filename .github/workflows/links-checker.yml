@@ -9,11 +9,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: First script from job1
-        run: echo We use the global workflow variable $PR_NUMBER
+        run: echo  $PR_NUMBER
   job2:
     runs-on: ubuntu-latest
     env:
       PR_NUMBER: ${{ github.event.pull_request.number }}
     steps:
       - name: First script from job2
-        run: echo We use the global workflow variable $PR_NUMBER
+        run: echo $PR_NUMBER
