@@ -1,9 +1,12 @@
 on: [pull_request]
 name: Check links for modified files
+
+env:
+  PR_NUMBER: ${{ github.event.pull_request.number }}
+
 jobs:
-  markdown-link-check:
+  job1:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@master
-      - uses: docker://mszostok/milv:0.0.1
-        name: "Running link checker"
+      - name: First script from job1
+        run: echo We use the global workflow variable $PR_NUMBER
