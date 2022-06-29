@@ -25,21 +25,10 @@ jobs:
     env:
       PR_NUMBER: 1
     steps:
-      - name: Adding markdown
-        run: |
-          cat > $GITHUB_STEP_SUMMARY << ENDOFFILE
-          ### BotKube image published successfully! :rocket:
-          
-          To test BotKube with PR changes, run:
-
-              gh pr checkout ${PR_NUMBER}
-
-              helm install botkube -n botkube --create-namespace \\
-              --set image.repository=infracloudio/pr/botkube \\
-              --set image.tag=v${PR_NUMBER} \\
-              ./helm/botkube
-
-          ENDOFFILE
+      - uses: ./.github/workflows/reuse-me.yaml
+        with:
+          username: "$PR_NUMBER"
+          token: "hakuna"
 
 #   entry-tests:
 #     name: Lint and test code
