@@ -1,0 +1,23 @@
+name: Reusable workflow
+
+on:
+  workflow_call:
+    inputs:
+      username:
+        required: true
+        type: string
+    secrets:
+      token:
+        required: true
+
+jobs:
+  example_job:
+    name: Generate output
+    runs-on: ubuntu-latest
+    env:
+      USERNAME: ${{ inputs.username }}
+      TOKEN: ${{ secrets.token }}
+
+    steps:
+      - id: step1
+        run: echo "${USERNAME}, ${TOKEN}"
