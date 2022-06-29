@@ -21,11 +21,23 @@ env:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
+  envSetup:
+    name: Setup Dynamic Environment Variables
+    runs-on: ubuntu-latest
+    outputs:
+      contextMessage: ${{ steps.set-output-defaults.outputs.contextMessage }}
+
+    steps:
+      - name: set outputs with default values
+        id: set-output-defaults
+        run: |
+          echo "::set-output name=contextMessage::Pull request: ${{ env.PR_NUMBER }} - https://github.com/infracloudio/botkube/pull/${{ env.PR_NUMBER }}"
 
   entry-tests:
-    uses: ./.github/workflows/reuse-me.yaml    
+    uses: ./.github/workflows/reuse-me.yaml
+    needs: [ envSetup ]
     with:
-      username: "Pull request: ${{ env.PR_NUMBER }} - https://github.com/x/x/pull/${{ env.PR_NUMBER }}"
+      username: "${{ needs.envSetup.outputs.contextMessage }}"
     secrets:
       token: "hakuna"
 #   entry-tests:
