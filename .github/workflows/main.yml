@@ -16,20 +16,17 @@ on:
       overrideDockerTag:
         description: Docker images tag. If not provided images generated from git commit SHA are used.
         required: false
+env:
+  PR_NUMBER: 1
+
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
 
   entry-tests:
-    name: Lint and test code
-    runs-on: ubuntu-latest
-    env:
-      PR_NUMBER: 1
-    steps:
-      - uses: ./.github/workflows/reuse-me.yaml
-        with:
-          username: "$PR_NUMBER"
-          token: "hakuna"
-
+    uses: ./.github/workflows/reuse-me.yaml    
+    with:
+      username: "$PR_NUMBER"
+      token: "hakuna"
 #   entry-tests:
 #     name: Lint and test code
 #     runs-on: ubuntu-latest
