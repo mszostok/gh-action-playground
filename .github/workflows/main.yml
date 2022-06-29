@@ -25,7 +25,7 @@ jobs:
   entry-tests:
     uses: ./.github/workflows/reuse-me.yaml    
     with:
-      username: "$PR_NUMBER"
+      username: "Pull request: {{ env.PR_NUMBER }} - https://github.com/x/x/pull/{{ env.PR_NUMBER }}"
     secrets:
       token: "hakuna"
 #   entry-tests:
