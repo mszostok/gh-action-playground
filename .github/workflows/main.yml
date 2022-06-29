@@ -26,6 +26,7 @@ jobs:
     uses: ./.github/workflows/reuse-me.yaml    
     with:
       username: "$PR_NUMBER"
+    secrets:
       token: "hakuna"
 #   entry-tests:
 #     name: Lint and test code
