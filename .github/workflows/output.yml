@@ -1,0 +1,22 @@
+name: CI
+
+on:
+  workflow_dispatch:
+
+jobs:
+  generate-a-secret-output:
+    runs-on: ubuntu-latest
+    steps:
+      - id: sets-a-secret
+        name: Generate, mask, and output a secret
+        run: |
+          BASE_VERSION=$(echo "test-42")
+          # old way
+          echo ::set-output name=base-version::$BASE_VERSION
+          
+          # new way
+          echo "base-version-new=$BASE_VERSION" >> $GITHUB_OUTPUT
+          
+      - name: Use that secret output (protected by a mask)
+        run: |
+          echo "the old is ${{ steps.sets-a-secret.outputs.base-version }} and the new is ${{ steps.sets-a-secret.outputs.base-version-new }}" 
