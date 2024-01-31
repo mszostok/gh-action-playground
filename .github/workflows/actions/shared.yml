@@ -4,8 +4,6 @@ description: "Creates an artifacts with cluster dump"
 runs:
   using: "composite"
   steps:
-    - name: Checkout
-      uses: actions/checkout@v4
 
     - name: Dump cluster state
       shell: bash

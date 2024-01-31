@@ -10,5 +10,8 @@ jobs:
   generate-a-secret-output:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
       - name: Call composite
         uses: ./.github/actions/shared
