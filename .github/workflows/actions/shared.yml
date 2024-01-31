@@ -1,0 +1,13 @@
+name: Dump cluster state
+description: "Creates an artifacts with cluster dump"
+
+runs:
+  using: "composite"
+  steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Dump cluster state
+      shell: bash
+      run: |
+        echo "Dumping cluster info into ${{ env.EXTENSION_DIR }}"
