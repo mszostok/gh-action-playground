@@ -20,7 +20,7 @@ jobs:
       - name: Call composite
         uses: ./.github/actions/shared
   call-workflow-passing-data:
-    uses: ./.github/workflows/test2/reuse-me.yaml
+    uses: ./.github/workflows/reuse-me.yaml
     with:
       username: user1
     secrets:
