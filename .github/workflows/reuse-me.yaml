@@ -15,7 +15,7 @@ jobs:
     name: Generate output
     runs-on: ubuntu-latest
     env:
-      USERNAME: ${{ inputs.username }}
+      USERNAME: "wrapping ${{ inputs.username }}"
       TOKEN: ${{ secrets.token }}
 
     steps:
