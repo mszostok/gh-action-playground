@@ -7,6 +7,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
+
+      - name: Extract Slack ID from mapping
+        id: slack-user
+        run: |
+          actor="${{ github.actor }}"
+          slack_id=$(yq -r ".users.\"$actor\"" slack-users.yaml)
+          if [ "$slack_id" = "null" ] || [ -z "$slack_id" ]; then
+            slack_id="$actor"
+          fi
+          echo "slack_id=$slack_id" >> $GITHUB_OUTPUT
+
       - name: Post blocks to a Slack channel
         uses: slackapi/slack-github-action@v2.1.1
         with:
@@ -20,12 +31,8 @@ jobs:
               - type: "header"
                 text:
                   type: "plain_text"
-                  text: "❌ E2E Test Failed"
+                  text: ":this-is-fine: E2E Test Failed"
                   emoji: true
-              - type: "section"
-                text:
-                  type: "mrkdwn"
-                  text: "*Workflow:* learn-github-actions\n*Job:* check-bats-version\n*Status:* `${{ job.status }}`"
               - type: "section"
                 text:
                   type: "mrkdwn"
@@ -33,4 +40,4 @@ jobs:
               - type: "context"
                 elements:
                   - type: "mrkdwn"
-                    text: "Triggered by: ${{ github.actor }}"
+                    text: "Triggered by: <@${{ steps.slack-user.outputs.slack_id }}>"
