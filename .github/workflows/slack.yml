@@ -14,9 +14,23 @@ jobs:
           token: ${{ secrets.SLACK_BOT_TOKEN }}
           payload: |
             channel: ${{ secrets.SLACK_CHANNEL_ID }}
-            text: "GitHub Action build result: ${{ job.status }}\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}"
+            username: "Workload Autoscaler E2E"
+            icon_emoji: ":x:"
             blocks:
+              - type: "header"
+                text:
+                  type: "plain_text"
+                  text: "❌ E2E Test Failed"
+                  emoji: true
               - type: "section"
                 text:
                   type: "mrkdwn"
-                  text: "GitHub Action build result: ${{ job.status }}\n${{ github.event.pull_request.html_url || github.event.head_commit.url }}"
+                  text: "*Workflow:* learn-github-actions\n*Job:* check-bats-version\n*Status:* `${{ job.status }}`"
+              - type: "section"
+                text:
+                  type: "mrkdwn"
+                  text: "🔗 *Run details:* <${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|View on GitHub>"
+              - type: "context"
+                elements:
+                  - type: "mrkdwn"
+                    text: "Triggered by: ${{ github.actor }}"
