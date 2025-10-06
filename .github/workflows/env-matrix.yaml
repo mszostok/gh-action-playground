@@ -3,15 +3,18 @@ on:
 
 jobs:
   test:
+    name: E2E Tests ${{matrix.cases.name}}
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        envs: 
-          - ""
-          - "E2E_WORKLOAD_AUTOSCALER_IN_PLACE_RESIZE_ENABLED=false"
-          - "E2E_WORKLOAD_AUTOSCALER_WORKLOAD_WHITELISTING_ENABLED=true"
+        cases: 
+          - name: "without in-place"
+          - name: "with in-place"
+            env: "E2E_WORKLOAD_AUTOSCALER_IN_PLACE_RESIZE_ENABLED=false"
+          - name: "whitelisting"
+            env: "E2E_WORKLOAD_AUTOSCALER_WORKLOAD_WHITELISTING_ENABLED=true"
     steps:
       -  run: |
-          echo "${{matrix.envs}}" >> "$GITHUB_ENV"
+          echo "${{matrix.cases.envs}}" >> "$GITHUB_ENV"
       - run: |
           printenv
