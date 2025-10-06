@@ -1,20 +1,17 @@
 on:
   workflow_dispatch:
 
-
-env:
-  MY_VAR: One
-
 jobs:
   test:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        include:
-          - env:
-              MY_VAR: Two
-          - env:
-              MY_VAR: Three
+        envs: 
+          - ""
+          - "E2E_WORKLOAD_AUTOSCALER_IN_PLACE_RESIZE_ENABLED=false"
+          - "E2E_WORKLOAD_AUTOSCALER_WORKLOAD_WHITELISTING_ENABLED=true"
     steps:
+      -  run: |
+          echo "${matrix.envs}" >> "$GITHUB_ENV"
       - run: |
           printenv
