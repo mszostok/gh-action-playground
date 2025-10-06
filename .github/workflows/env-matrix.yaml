@@ -14,7 +14,12 @@ jobs:
           - name: "whitelisting"
             envs: ["E2E_WORKLOAD_AUTOSCALER_WORKLOAD_WHITELISTING_ENABLED=true"]
     steps:
-      -  run: |
-          echo "${{ fromJSON(matrix.cases.envs) }}" >> "$GITHUB_ENV"
+      - uses: actions/github-script@v7
+        with:
+          script: |
+            for (const e of ${{ toJSON(matrix.cases.envs) }}) {
+              const [k, v] = e.split("=");
+              core.exportVariable(k, v);
+            }
       - run: |
           printenv
