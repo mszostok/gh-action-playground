@@ -10,9 +10,9 @@ jobs:
         cases: 
           - name: "without in-place"
           - name: "with in-place"
-            env: "E2E_WORKLOAD_AUTOSCALER_IN_PLACE_RESIZE_ENABLED=false"
+            envs: ["E2E_WORKLOAD_AUTOSCALER_IN_PLACE_RESIZE_ENABLED=false"]
           - name: "whitelisting"
-            env: "E2E_WORKLOAD_AUTOSCALER_WORKLOAD_WHITELISTING_ENABLED=true"
+            envs: ["E2E_WORKLOAD_AUTOSCALER_WORKLOAD_WHITELISTING_ENABLED=true"]
     steps:
       -  run: |
           echo "${{matrix.cases.envs}}" >> "$GITHUB_ENV"
