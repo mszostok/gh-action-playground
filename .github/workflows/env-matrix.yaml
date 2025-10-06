@@ -12,6 +12,6 @@ jobs:
           - "E2E_WORKLOAD_AUTOSCALER_WORKLOAD_WHITELISTING_ENABLED=true"
     steps:
       -  run: |
-          echo "${matrix.envs}" >> "$GITHUB_ENV"
+          echo "${{matrix.envs}}" >> "$GITHUB_ENV"
       - run: |
           printenv
